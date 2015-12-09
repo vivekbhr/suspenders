@@ -1797,7 +1797,7 @@ def mainRun():
 
     #superfluous/debugging arguments
     p.add_argument('-c', metavar='chartFilename', dest='chartFilename', type=str, help='save pileup chart to an image (default: none)', default=None)
-    p.add_argument('-v', dest='verbose', action='store_true', help='verbose (default: no)') 
+    p.add_argument('-v', dest='verbose', action='store_true', help='verbose (default: no)')
 
     p.add_argument('-e', '--keep-temp', dest='keepTemp', action='store_true', help='keep the temporary merge files', default=False)
 
@@ -1874,7 +1874,7 @@ def mainRun():
     try:
         #create any extra workers
         workerThreads = []
-        for i in range(1, args.numProcesses):
+        for i in range(0, args.numProcesses):
             p = MergeWorker(readsQueue, resultsQueue, False, args.inputBams, args.outMergedBam, args.mergeType, args.isRandomFilter, outHeader,
                             manager.address, args.numProcesses, i, max_queue_size, myPileupDict, args.keepTemp, args.inputType, args.mateAll)
             p.start()
