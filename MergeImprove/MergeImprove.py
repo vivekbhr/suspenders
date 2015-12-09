@@ -424,8 +424,8 @@ class MergeWorker(multiprocessing.Process):
         #tell the other processes it's the end of the queue
         for x in range(0, self.numProcs-1):
             self.readsQueue.put(END_OF_QUEUE)
-
-        logger.info('[Master] All reads scanned.  Waiting on workers to finish processing...')
+        if args.verbose:
+            logger.info('[Master] All reads scanned.  Waiting on workers to finish processing...')
 
         #this handles the sorting of this processes pileup file
         if self.mergerType == PILEUP_MERGE:
@@ -437,8 +437,8 @@ class MergeWorker(multiprocessing.Process):
         for bam in files:
             bam.close()
         self.outputFile.close()
-
-        logger.info('[0] Completed first pass')
+        if args.verbose:
+            logger.info('[0] Completed first pass')
 
         #self.resultsQueue.put(self.percentageChoice)
 
@@ -478,7 +478,8 @@ class MergeWorker(multiprocessing.Process):
                 #self.maxQueueSize.value += 10
                 #logger.info('['+str(self.workerID)+'] Increasing queue size to '+str(self.maxQueueSize.value))
                 self.idleCount += 1
-                logger.info('['+str(self.workerID)+'] Idle count: '+str(self.idleCount))
+                if args.verbose:
+                    logger.info('['+str(self.workerID)+'] Idle count: '+str(self.idleCount))
                 tellStarts = None
                 if self.idleCount >= MAX_IDLE_COUNT:
                     logger.info('['+str(self.workerID)+'] Idle too often, terminating early')
@@ -575,8 +576,8 @@ class MergeWorker(multiprocessing.Process):
         for bam in files:
             bam.close()
         self.outputFile.close()
-
-        logger.info('['+str(self.workerID)+'] Completed first pass')
+        if args.verbose:
+            logger.info('['+str(self.workerID)+'] Completed first pass')
 
         #self.resultsQueue.put(self.statistics)
         #self.resultsQueue.put(self.percentageChoice)
@@ -798,8 +799,8 @@ class MergeWorker(multiprocessing.Process):
         #close the file that has the reads for the pileup calculations
         self.tempFile.close()
         self.pileupTempFile.close()
-
-        logger.info('['+str(self.workerID)+'] Sorting the pileup data...')
+        if args.verbose:
+            logger.info('['+str(self.workerID)+'] Sorting the pileup data...')
 
         #sort the current output file into normal positional sort
         pysam.sort(self.pileupTempPrefix+'.bam', self.pileupTempPrefix+'.sorted')
@@ -1730,7 +1731,7 @@ def performInputChecks(fnList):
         bam = pysam.Samfile(fn, 'rb')
 
         currentHeader = dict(bam.header.items())
-        if currentHeader['HD']['SO'] != 'queryname': 
+        if currentHeader['HD']['SO'] != 'queryname':
             logger.warning('File "'+fn+'" SO tag indicates not sorted by queryname.')
 
         if retHeader == None:
