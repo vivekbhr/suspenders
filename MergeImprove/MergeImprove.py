@@ -1730,8 +1730,8 @@ def performInputChecks(fnList):
         bam = pysam.Samfile(fn, 'rb')
 
         currentHeader = dict(bam.header.items())
-        if currentHeader['HD']['SO'] != 'query_name':
-            logger.warning('File "'+fn+'" SO tag indicates not sorted by query_name.')
+        if currentHeader['HD']['SO'] != 'queryname': 
+            logger.warning('File "'+fn+'" SO tag indicates not sorted by queryname.')
 
         if retHeader == None:
             #first file, copy header
