@@ -1029,9 +1029,8 @@ def calculateScore(cigar, editDistance):
             #match type
             if cigType == 'M':
                 score += MATCH*intNum
-
-            #indel type
-            elif cigType == 'I' or cigType == 'D':
+            #indel type; clipping also
+            elif cigType == 'I' or cigType == 'D' or cigType == 'S' or cigType == 'H':
                 score += GAP_OPEN + intNum*EXTENSION
                 foundEdits += intNum
 
